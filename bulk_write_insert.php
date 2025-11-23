@@ -4,18 +4,21 @@ require 'vendor/autoload.php';
 
 use MongoDB\Client;
 
-// Connect to MongoDB running on MongoDB Atlas
-// Replace your connection string in the braces
-// $client = new Client("your_connection_string");
 $client = new Client("mongodb+srv://jamesshisiah_db_user:rWtzn179ub4VpPBm@bulkwrite.vcdi5mk.mongodb.net/?appName=BulkWrite");
 
-// Select the database and collection
 try {
     $database = $client->selectDatabase('bulkwritedb');
     $collection = $database->selectCollection('customers');
+
+    $operations = [
+        ['insertOne' => [ ['name' => 'Alice', 'age' => 25] ]],
+        ['insertOne' => [ ['name' => 'Bob', 'age' => 30] ]],
+        ['insertOne' => [ ['name' => 'Charlie', 'age' => 28] ]],
+    ];
+
+    $result = $collection->bulkWrite($operations);
+    echo "Inserted documents: " . $result->getInsertedCount() . "\n";
 } catch (\Exception $e) {
     echo "Error connecting to MongoDB: " . $e->getMessage() . "\n";
     exit(1);
 }
-
-echo "Connected to MongoDB successfully.\n";
