@@ -22,6 +22,7 @@ Demonstrates grouped write operations (insert, update, delete) using MongoDB PHP
 - `bulk_write_update.php` shows `updateOne`, `updateMany`, `$set`, `$inc`.
 - `bulk_write_delete.php` shows `deleteOne`, `deleteMany`.
 - `bulk_write_combine.php` mixes insert, update, delete on `users` collection.
+- `bulk_write_errors.php` demonstrates error handling in bulk writes.
 
 ## Ordered vs Unordered
 Ordered (default): operations run sequentially; later writes can depend on earlier inserts.
@@ -39,16 +40,35 @@ Can improve throughput; may continue after individual errors.
 - $inc: increment numeric fields.
 
 ## Running Examples
-php bulk_write_insert.php
-php bulk_write_update.php
-php bulk_write_delete.php
-php bulk_write_all.php
+```bash
+$ php bulk_write_insert.php
+```
+
+```bash
+$ php bulk_write_update.php
+```
+
+```bash
+$ php bulk_write_delete.php
+```
+
+```bash
+$ php bulk_write_all.php
+```
+
+```bash
+$ php bulk_write_errors.php
+```
 
 ## Result Metrics
 - getInsertedCount()
 - getMatchedCount()
 - getModifiedCount()
 - getDeletedCount()
+- getUpsertedCount()
+- getUpsertedIds()
+- getWriteErrors()
+- getWriteConcernError()
 
 ## Tips
 Use environment variables for credentials (recommended).
@@ -56,5 +76,4 @@ Validate filters to avoid unintended mass updates/deletes.
 Group related writes to reduce round trips.
 
 ## Next Steps
-Add error handling granularity (write concern).
-Explore transactions for multi-collection atomicity.
+Explore MongoDB docs: [Bulk Write](https://www.mongodb.com/docs/php-library/current/crud/bulk-write/) | [Error Handling](https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-bulkWrite/#errors-exceptions).
