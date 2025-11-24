@@ -6,7 +6,7 @@ use MongoDB\Driver\Exception\BulkWriteException;
 use MongoDB\Driver\Exception\Exception as DriverException;
 use MongoDB\Driver\WriteConcern;
 
-$uri = 'mongodb+srv://jamesshisiah_db_user:<db_password>@bulkwrite.vcdi5mk.mongodb.net/?appName=BulkWrite';
+$uri = 'your_connection_string';
 
 $client = new Client($uri);
 $collection = $client->selectDatabase('bulkwritedb')->selectCollection('users');

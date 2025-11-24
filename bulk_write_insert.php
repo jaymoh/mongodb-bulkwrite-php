@@ -4,7 +4,7 @@ require 'vendor/autoload.php';
 
 use MongoDB\Client;
 
-$client = new Client("mongodb+srv://jamesshisiah_db_user:<db_password>@bulkwrite.vcdi5mk.mongodb.net/?appName=BulkWrite");
+$client = new Client("your_connection_string");
 
 try {
     $database = $client->selectDatabase('bulkwritedb');

@@ -6,8 +6,9 @@ use MongoDB\Client;
 
 // Connect to MongoDB running on MongoDB Atlas
 // Replace your connection string in the braces
+// e.g. mongodb+srv://jamesshisiah_db_user:<db_password>@bulkwrite.vcdi5mk.mongodb.net/?appName=BulkWrite
 // $client = new Client("your_connection_string");
-$client = new Client("mongodb+srv://jamesshisiah_db_user:<db_password>@bulkwrite.vcdi5mk.mongodb.net/?appName=BulkWrite");
+$client = new Client("your_connection_string");
 
 // Select the database and collection
 try {
