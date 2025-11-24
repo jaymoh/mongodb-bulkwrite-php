@@ -28,6 +28,8 @@ if (!is_readable($csvPath)) {
 
 $client = new Client($uri);
 $collection = $client->selectDatabase($dbName)->selectCollection('customers');
+// If necessary, drop existing collection for clean import
+$collection->drop();
 
 function parseDate(?string $raw): ?UTCDateTime
 {
