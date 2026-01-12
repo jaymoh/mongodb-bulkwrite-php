@@ -24,3 +24,8 @@ $databases = $client->listDatabases();
 // If the above line does not throw an exception, the connection is successful
 echo "Successfully connected to MongoDB!\n";
 
+// List databases
+echo "Databases:\n";
+foreach ($databases as $database) {
+    echo "- " . $database->getName() . "\n";
+}

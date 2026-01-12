@@ -481,6 +481,41 @@ php bulk_write_csv_import.php
 
 ---
 
+## Using Docker
+
+If you prefer using Docker, we have included a `Dockerfile` that sets up the PHP environment with the MongoDB extension
+and necessary dependencies.
+We also provide a `docker-compose.yml` that sets up a MongoDB Atlas container alongside the PHP environment.
+
+Update the `MONGO_URI` in the `.env` to point to your MongoDB Atlas cluster or local MongoDB instance,
+e.g.
+`MONGODB_URI=mongodb://bulkwriteuser:secret@mongodb:27017/bulkwritedb?authSource=bulkwritedb`
+
+To build and run the Docker container, use the following commands:
+
+```bash
+ docker compose up -d --build
+```
+
+Then, you can run any script directly, e.g., to run the connect example:
+
+```bash
+ docker compose exec php php bulk_write_connect.php
+```
+
+You can enter the container shell for interactive use:
+
+```bash
+ docker compose exec php sh
+```
+
+Stop the containers when done:
+
+```bash
+ docker compose down
+```
+
+
 ## Next Steps
 Explore the following resources to deepen your understanding of MongoDB and PHP:
 
