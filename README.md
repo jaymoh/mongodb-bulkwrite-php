@@ -450,6 +450,69 @@ $bulkWrite = ClientBulkWrite::createWithCollection($collection, [
 ]);
 ```
 
+### 5. Transactions for "All or Nothing"
+
+When you need atomic guarantees—where either **all operations succeed or none are applied**—wrap your bulk write in a transaction. The `MongoDB\with_transaction()` helper simplifies this by handling retries for transient errors automatically:
+
+```php
+use MongoDB\Client;
+use MongoDB\ClientBulkWrite;
+use MongoDB\Driver\Session;
+
+use function MongoDB\with_transaction;
+
+$client = new Client($uri);
+
+// Start a session for the transaction
+$session = $client->startSession();
+
+$customersCollection = $client->selectCollection('shop', 'customers');
+$ordersCollection = $client->selectCollection('shop', 'orders');
+
+// Use MongoDB\with_transaction() helper for automatic retry handling
+with_transaction($session, function (Session $session) use ($client, $customersCollection, $ordersCollection) {
+    // Create bulk write with the session
+    $bulkWrite = ClientBulkWrite::createWithCollection($customersCollection, [
+        'session' => $session,
+        'ordered' => true
+    ]);
+
+    // Add operations that must all succeed together
+    $bulkWrite->insertOne(['name' => 'Alice', 'email' => 'alice@example.com', 'balance' => 1000]);
+    $bulkWrite->updateOne(
+        ['name' => 'Bob'],
+        ['$inc' => ['balance' => -500]]
+    );
+
+    // Switch to orders collection (same transaction)
+    $bulkWrite = $bulkWrite->withCollection($ordersCollection);
+    $bulkWrite->insertOne([
+        'customer' => 'Bob',
+        'recipient' => 'Alice',
+        'amount' => 500,
+        'type' => 'transfer'
+    ]);
+
+    // Execute all operations atomically
+    $client->bulkWrite($bulkWrite);
+});
+
+echo "Transaction committed successfully!\n";
+```
+
+**Why use transactions with bulk writes?**
+- **Atomicity**: All operations commit together or roll back on failure
+- **Automatic retries**: `with_transaction()` retries on transient errors (e.g., network issues)
+- **Cross-collection consistency**: Maintain data integrity across multiple collections
+
+**When to use transactions:**
+- Financial operations (transfers, payments)
+- Related data that must stay consistent (e.g., inventory + orders)
+- Multi-collection updates that depend on each other
+- Any scenario where partial writes would leave data in an invalid state
+
+**Note**: [Transactions](https://www.mongodb.com/docs/manual/core/transactions-production-consideration/) require a replica set or sharded cluster. They are not available on standalone MongoDB instances.
+
 ---
 
 ## Tutorial Files
